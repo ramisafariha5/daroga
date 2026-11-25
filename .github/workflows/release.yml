@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build -o dist/daroga-linux-amd64 ./main.go
+          GOOS=darwin GOARCH=amd64 go build -o dist/daroga-darwin-amd64 ./main.go
+          GOOS=darwin GOARCH=arm64 go build -o dist/daroga-darwin-arm64 ./main.go
+          GOOS=windows GOARCH=amd64 go build -o dist/daroga-windows-amd64.exe ./main.go
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*

@@ -1,0 +1,14 @@
+# Go build artifacts
+*.exe
+*.test
+*.out
+bin/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# OS/editor files
+.DS_Store
+.vscode/
